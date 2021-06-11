@@ -1,0 +1,17 @@
+# Ignoramos la carpeta venv (entorno virtual)
+venv/
+
+# Ignoramos el archivo de variables de entorno
+.env
+
+# Ignoramos las bases de datos
+data/
+
+# Ignoramos la carpeta de configuración de Visual Studio Code
+.vscode/
+
+# Ignoramos el archivo de configuración
+config.py
+
+# Ignoramos las carpetas pycache
+**/__pycache__
