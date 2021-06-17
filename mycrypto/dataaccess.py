@@ -21,7 +21,7 @@ class DBmanager():
 
     def consultaMuchasSQL(self, query, parametros=[]):
         # Abrimos la conexion
-        conexion = sqlite3.connect(self.database_path)
+        conexion = sqlite3.connect('data/movimientos.db') # no funciona con self.database_path
         cur = conexion.cursor()
         # Ejecutamos la consulta
         cur.execute(query, parametros)
@@ -35,7 +35,7 @@ class DBmanager():
             return resultado[0]
 
     def modificaTablaSQL(self, query, parametros=[]):
-        conexion = sqlite3.connect(self.database_path)
+        conexion = sqlite3.connect('data/movimientos.db') # no funciona con self.database_path
         cur = conexion.cursor()
         cur.execute(query, parametros)
         conexion.commit()

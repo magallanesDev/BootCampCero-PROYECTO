@@ -29,6 +29,47 @@
         </div>
     </section>
     <hr>
+    <div class="detail-movimiento container">
+        <form>
+            <div class="row">
+                <input type="hidden" id="id">
+                <input type="hidden" id="date">
+                <input type="hidden" id="time">
+                <div class="column column-33">
+                    <label for="moneda_from">From</label>
+                    <select name="moneda_from" id="moneda_from">
+                        <option value="EUR">Euro</option>
+                        <option value="BTC">Bitcoin</option>
+                        <option value="ETH">Ethereum</option>
+                    </select>
+                </div>
+                <div class="column column-33">
+                    <label for="moneda_to">To</label>
+                    <select name="moneda_to" id="moneda_to">
+                        <option value="EUR">Euro</option>
+                        <option value="BTC">Bitcoin</option>
+                        <option value="ETH">Ethereum</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column column-33">
+                    <label for="cantidad_from">Q_From</label>
+                    <input type="number" name="cantidad_from" id="cantidad_from" step="any">
+                </div>
+                <div class="column column-33">
+                    <label for="cantidad_to">Q_To</label>
+                    <input type="number" name="cantidad_to" id="cantidad_to" step="any">
+                </div>
+            </div>   
+            <div class="row">
+                <div class="column">
+                    <button id="cancelar">Cancelar</button>
+                    <button id="ok">OK</button>
+                </div>
+            </div>
+        </form>  
+    </div>
 <footer>&copy magallanesDev 2021 - Todos los derechos reservados</footer> 
 </body>
 </html>
