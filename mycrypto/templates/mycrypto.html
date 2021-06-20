@@ -7,7 +7,7 @@
     <title>Aplicación web myCRYPTO: FLASK + vanilla JS</title>
     <link rel="stylesheet" href="/static/css/milligram.css">
     <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/spa.js"></script>
+    <script src="/static/js/mycrypto.js"></script>
 </head>
 <body>
     <header>myCRYPTO</header>
@@ -38,33 +38,33 @@
                 <div class="column column-33">
                     <label for="moneda_from">From</label>
                     <select name="moneda_from" id="moneda_from">
-                        <option value="EUR">Euro</option>
-                        <option value="BTC">Bitcoin</option>
-                        <option value="ETH">Ethereum</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
                     </select>
                 </div>
                 <div class="column column-33">
                     <label for="moneda_to">To</label>
                     <select name="moneda_to" id="moneda_to">
-                        <option value="EUR">Euro</option>
-                        <option value="BTC">Bitcoin</option>
-                        <option value="ETH">Ethereum</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="column column-33">
                     <label for="cantidad_from">Q_From</label>
-                    <input type="number" name="cantidad_from" id="cantidad_from" step="any">
+                    <input type="number" name="cantidad_from" id="cantidad_from">
                 </div>
                 <div class="column column-33">
                     <label for="cantidad_to">Q_To</label>
-                    <input type="number" name="cantidad_to" id="cantidad_to" step="any">
+                    <input type="number" name="cantidad_to" id="cantidad_to" readonly placeholder="se rellena al pulsar calcular">
                 </div>
             </div>   
             <div class="row">
                 <div class="column">
-                    <button id="cancelar">Cancelar</button>
+                    <button id="calcular">Calcular</button>
                     <button id="ok">OK</button>
                 </div>
             </div>

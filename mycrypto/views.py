@@ -6,12 +6,13 @@ from flask import jsonify, render_template, request
 from http import HTTPStatus
 
 
+
 dbManager = DBmanager(app.config.get('DATABASE')) # instancia de la clase DBmanager
 
 
 @app.route('/')
 def listaMovimientos():
-    return render_template('spa.html')
+    return render_template('mycrypto.html')
 
 
 @app.route('/api/v1/movimientos')  # método GET por defecto, muestra lista de movimientos

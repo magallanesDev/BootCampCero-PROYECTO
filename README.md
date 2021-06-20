@@ -22,7 +22,7 @@
 
 #### Rellenar el archivo <config_template.py> con ruta a base de datos. Renombrar el archivo <config_template.py> a <config.py>
 
-#### Crear la base de datos SQL <movimientos.db> en el directorio <data>:
+#### Crear la base de datos SQL <movimientos.db> en el directorio <data>. Ver archivo </migrations/initial.sql>
     CREATE TABLE "movimientos" (
     "id"	INTEGER,
     "date"	TEXT NOT NULL,
