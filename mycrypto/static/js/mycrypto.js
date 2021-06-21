@@ -1,3 +1,4 @@
+// const API_KEY_COINMARKET = '43095178-7dd8-48a4-8b66-e799480ad420'
 const movGlobal = {}
 
 xhr = new XMLHttpRequest()
@@ -30,6 +31,7 @@ function recibeRespuestaCoinmarket() {
         console.log(movGlobal)
     }    
 }
+
 
 
 function recibeRespuestaCreamovimiento() {
@@ -81,11 +83,13 @@ function muestraMovimientos() {
 }
 
 
+
 function llamaApiMovimientos() {
     xhr.open('GET', `http://localhost:5000/api/v1/movimientos`, true)
     xhr.onload = muestraMovimientos
     xhr.send()
 }
+
 
 
 function llamaApiCoinmarket(evento) {
@@ -95,7 +99,8 @@ function llamaApiCoinmarket(evento) {
     movimiento.cantidad_from = document.querySelector("#cantidad_from").value
     movimiento.moneda_to = document.querySelector("#moneda_to").value
 
-    xhr.open('GET', `https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${movimiento.cantidad_from}&symbol=${movimiento.moneda_from}&convert=${movimiento.moneda_to}&CMC_PRO_API_KEY=43095178-7dd8-48a4-8b66-e799480ad420`)
+    xhr.open("GET", `http://localhost:5000/api/v1/par/${movimiento.moneda_from}/${movimiento.moneda_to}/${movimiento.cantidad_from}`, true)
+    // xhr.open('GET', `https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${movimiento.cantidad_from}&symbol=${movimiento.moneda_from}&convert=${movimiento.moneda_to}&CMC_PRO_API_KEY=${API_KEY_COINMARKET}`)
     xhr.onload = recibeRespuestaCoinmarket
     xhr.send()
     console.log("He lanzado petición a Coin Market")
@@ -122,8 +127,6 @@ window.onload = function() {
     document.querySelector("#calcular")
         .addEventListener("click", llamaApiCoinmarket)
     
-    
     document.querySelector("#ok")
-        .addEventListener("click", llamaApiCreaMovimiento)
-                
+        .addEventListener("click", llamaApiCreaMovimiento)          
 }
