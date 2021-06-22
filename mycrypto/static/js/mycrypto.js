@@ -2,6 +2,40 @@
 const movGlobal = {}
 
 xhr = new XMLHttpRequest()
+xhr2 = new XMLHttpRequest()
+
+
+function muestraMovimientos() {
+    if (this.readyState === 4 && this.status === 200) {
+        const respuesta = JSON.parse(this.responseText)
+
+        if (respuesta.status != 'success') {
+            alert("Se ha producido un error en la consulta de movimientos")
+            return
+        }
+
+        const tbody = document.querySelector(".tabla-movimientos tbody")  // lo insertamos dentro de tbody (mirar spa.html)
+        tbody.innerHTML = ""
+        
+        for (let i = 0; i < respuesta.movimientos.length; i++) {
+            const movimiento = respuesta.movimientos[i]
+            const fila = document.createElement("tr")
+        
+            const dentro = `
+                <td>${movimiento.date}</td>
+                <td>${movimiento.time}</td>
+                <td>${movimiento.moneda_from}</td>
+                <td>${movimiento.cantidad_from}</td>
+                <td>${movimiento.moneda_to}</td>
+                <td>${movimiento.cantidad_to}</td>
+            `
+            fila.innerHTML = dentro
+            
+            tbody.appendChild(fila)
+        }
+    }
+}
+
 
 
 function recibeRespuestaCoinmarket() {
@@ -51,34 +85,22 @@ function recibeRespuestaCreamovimiento() {
 
 
 
-function muestraMovimientos() {
-    if (this.readyState === 4 && this.status === 200) {
+function recibeRespuestaStatus() {
+    if (this.readyState === 4 && (this.status === 200 || this.status === 201)) {
         const respuesta = JSON.parse(this.responseText)
 
-        if (respuesta.status != 'success') {
-            alert("Se ha producido un error en la consulta de movimientos")
+        if (respuesta.status !== 'success') {
+            alert("Se ha producido un error en acceso a servidor" + respuesta.mensaje)
             return
         }
-
-        const tbody = document.querySelector(".tabla-movimientos tbody")  // lo insertamos dentro de tbody (mirar spa.html)
-        tbody.innerHTML = ""
         
-        for (let i = 0; i < respuesta.movimientos.length; i++) {
-            const movimiento = respuesta.movimientos[i]
-            const fila = document.createElement("tr")
+        let invertido = 0
+        for (let i = 0; i < respuesta.data.length; i++) {
+            invertido += respuesta.data[i].cantidad_from
+        }   
+        document.querySelector("#invertido").setAttribute("placeholder", invertido)
+        console.log(invertido)
         
-            const dentro = `
-                <td>${movimiento.date}</td>
-                <td>${movimiento.time}</td>
-                <td>${movimiento.moneda_from}</td>
-                <td>${movimiento.cantidad_from}</td>
-                <td>${movimiento.moneda_to}</td>
-                <td>${movimiento.cantidad_to}</td>
-            `
-            fila.innerHTML = dentro
-            
-            tbody.appendChild(fila)
-        }
     }
 }
 
@@ -121,12 +143,23 @@ function llamaApiCreaMovimiento(evento) {
 
 
 
+function llamaApiStatus() {
+    xhr2.open("GET", `http://localhost:5000/api/v1/status`, true)
+    xhr2.onload = recibeRespuestaStatus
+    xhr2.send()  
+}   
+
+
+
 window.onload = function() {
     llamaApiMovimientos()
+
+    llamaApiStatus()
     
     document.querySelector("#calcular")
         .addEventListener("click", llamaApiCoinmarket)
     
     document.querySelector("#ok")
-        .addEventListener("click", llamaApiCreaMovimiento)          
+        .addEventListener("click", llamaApiCreaMovimiento)
+
 }

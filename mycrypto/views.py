@@ -69,12 +69,23 @@ def par(_from, _to, quantity = 1.0):
 
 
 
+
 @app.route('/api/v1/status')  # método GET por defecto, muestra el estado de nuestra inversión
 def statusAPI():
-    query = "SELECT * FROM movimientos ORDER BY date;"
-    
+    # Calculamos el total invertido
+    # query = "SELECT SUM(cantidad_from) FROM movimientos WHERE moneda_from='EUR';"
+    query = "SELECT cantidad_from FROM movimientos WHERE moneda_from='EUR';"
+
     try:
         lista = dbManager.consultaMuchasSQL(query)
-        return jsonify({'status': 'success', 'movimientos': lista})
+        
+        return jsonify({'status': 'success', 'data': lista})
     except sqlite3.Error as e:
         return jsonify({'status': 'fail', 'mensaje': str(e)})
+
+    
+
+
+
+    
+    

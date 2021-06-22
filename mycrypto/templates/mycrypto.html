@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>myCRYPTO</header>
-    <section class="container" id="principal">
+    <section class="container" id="lista-movimientos">
         <div class="lista-movimientos">
             <table class="tabla-movimientos">
                 <thead>
@@ -32,9 +32,6 @@
     <div class="detail-movimiento container">
         <form>
             <div class="row">
-                <input type="hidden" id="id">
-                <input type="hidden" id="date">
-                <input type="hidden" id="time">
                 <div class="column column-33">
                     <label for="moneda_from">From</label>
                     <select name="moneda_from" id="moneda_from">
@@ -50,7 +47,7 @@
                         <option value="BTC">Bitcoin (BTC)</option>
                         <option value="ETH">Ethereum (ETH)</option>
                     </select>
-                </div>
+                </div>  
             </div>
             <div class="row">
                 <div class="column column-33">
@@ -60,15 +57,31 @@
                 <div class="column column-33">
                     <label for="cantidad_to">Q_To</label>
                     <input type="number" name="cantidad_to" id="cantidad_to" readonly placeholder="se rellena al pulsar calcular">
-                </div>
+                </div>  
             </div>   
             <div class="row">
                 <div class="column">
                     <button id="calcular">Calcular</button>
-                    <button id="ok">OK</button>
+                    <button id="ok">OK</button>                
                 </div>
             </div>
-        </form>  
+        </form>
+        <hr>
+        <div class="row">
+            <div class="column column-33">
+                <label for="invertido">Total invertido (€)</label>
+                <input type="number" name="invertido" id="invertido" readonly placeholder="total invertido (€)">
+            </div>
+            <div class="column column-33">
+                <label for="valor_actual">Valor actual (€)</label>
+                <input type="number" name="valor_actual" id="valor_actual" readonly placeholder="valor actual (€)">
+            </div>
+            <div class="column column-33">
+                <label for="resultado">Resultado inversión (€)</label>
+                <input type="number" name="resultado" id="resultado" readonly placeholder="resultado inversión (€)">
+            </div>
+        </div>
+        <hr>
     </div>
 <footer>&copy magallanesDev 2021 - Todos los derechos reservados</footer> 
 </body>
