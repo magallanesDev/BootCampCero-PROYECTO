@@ -119,9 +119,9 @@ def statusAPI2():
         saldoBtc = saldoToBtc - saldoFromBtc
         print("saldo BTC: {}".format(saldoBtc))
 
-        url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol=BTC&convert=EUR&CMC_PRO_API_KEY={}'
+        url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol={}&convert=EUR&CMC_PRO_API_KEY={}'
         
-        respuestaBtc = requests.get(url.format(saldoBtc, API_KEY_COINMARKET))
+        respuestaBtc = requests.get(url.format(saldoBtc, cryptos[0], API_KEY_COINMARKET))
         #### GESTIÓN DE ERRORES ####
         print("respuesta Btc *********: {}". format(respuestaBtc))
         respuestaBtcJson = respuestaBtc.json()
@@ -154,9 +154,9 @@ def statusAPI2():
         saldoEth = saldoToEth - saldoFromEth
         print("saldo ETH: {}".format(saldoEth))
 
-        url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol=ETH&convert=EUR&CMC_PRO_API_KEY={}'
+        url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol={}&convert=EUR&CMC_PRO_API_KEY={}'
         
-        respuestaEth = requests.get(url.format(saldoBtc, API_KEY_COINMARKET))
+        respuestaEth = requests.get(url.format(saldoEth, cryptos[1], API_KEY_COINMARKET))
         #### GESTIÓN DE ERRORES ####
         print("respuesta Eth *********: {}". format(respuestaEth))
         respuestaEthJson = respuestaEth.json()
@@ -177,7 +177,6 @@ def statusAPI2():
         
 
         return jsonify({'status': 'success', 'data': {"invertido": saldoFromEur, "valor_actual": valorActualInv}})
-        # return jsonify({'status': 'success', 'data': {"invertido": saldoToEur, "valor_actual": 0}})
     
 
     except sqlite3.Error as e:
