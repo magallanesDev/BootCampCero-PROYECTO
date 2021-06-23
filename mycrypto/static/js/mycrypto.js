@@ -80,6 +80,7 @@ function recibeRespuestaCreamovimiento() {
         alert(respuesta.mensaje)
 
         llamaApiMovimientos()
+        llamaApiStatus()
     }    
 }
 
@@ -93,14 +94,17 @@ function recibeRespuestaStatus() {
             alert("Se ha producido un error en acceso a servidor" + respuesta.mensaje)
             return
         }
+
+        document.querySelector("#invertido").setAttribute("placeholder", respuesta.data.invertido)
+        console.log(respuesta.data.invertido)
+
+        document.querySelector("#valor_actual").setAttribute("placeholder", respuesta.data.valor_actual)
+        console.log(respuesta.data.value) 
         
-        let invertido = 0
-        for (let i = 0; i < respuesta.data.length; i++) {
-            invertido += respuesta.data[i].cantidad_from
-        }   
-        document.querySelector("#invertido").setAttribute("placeholder", invertido)
-        console.log(invertido)
-        
+        resultadoInv = respuesta.data.invertido - respuesta.data.valor_actual
+        document.querySelector("#resultado").setAttribute("placeholder", resultadoInv)
+        console.log(resultadoInv)
+
     }
 }
 
