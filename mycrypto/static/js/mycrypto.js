@@ -47,10 +47,10 @@ function recibeRespuestaCoinmarket() {
             return
         }
         
-        movGlobal.date = respuesta.status.timestamp.substring(0, 10)
-        console.log(movGlobal.date)
-        movGlobal.time = respuesta.status.timestamp.substring(11, 23)
-        console.log(movGlobal.time)
+        //movGlobal.date = respuesta.status.timestamp.substring(0, 10)
+        //console.log(movGlobal.date)
+        //movGlobal.time = respuesta.status.timestamp.substring(11, 23)
+        //console.log(movGlobal.time)
         movGlobal.moneda_from = document.querySelector("#moneda_from").value
         console.log(movGlobal.moneda_from)
         movGlobal.cantidad_from = document.querySelector("#cantidad_from").value
@@ -72,7 +72,7 @@ function recibeRespuestaCreamovimiento() {
         const respuesta = JSON.parse(this.responseText)
 
         if (respuesta.status !== 'success') {
-            alert("Se ha producido un error en acceso a servidor" + respuesta.mensaje)
+            alert("Se ha producido un error en acceso a servidor: " + respuesta.mensaje)
             return
         }
         

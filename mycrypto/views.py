@@ -5,6 +5,7 @@ from mycrypto import app
 from mycrypto.dataaccess import DBmanager
 from flask import jsonify, render_template, request, Response
 from http import HTTPStatus
+from datetime import datetime
 from config import API_KEY_COINMARKET
 
 
@@ -18,21 +19,6 @@ valorCrypto = {'BTC': 0, 'ETH': 0 }
 
 queryFrom = "SELECT cantidad_from FROM movimientos WHERE moneda_from = ?;"
 queryTo = "SELECT cantidad_to FROM movimientos WHERE moneda_to = ?;"
-
-
-'''def calculaSaldoFrom(query, parametros=[]):
-    lista = dbManager.consultaMuchasSQL(query, parametros)
-    saldoFrom = 0
-    for i in range(len(lista)):
-        saldoFrom += lista[i]['cantidad_from']
-    return saldoFrom
-
-def calculaSaldoTo(query, parametros=[]):
-    lista = dbManager.consultaMuchasSQL(query, parametros)
-    saldoTo = 0
-    for i in range(len(lista)):
-        saldoTo += lista[i]['cantidad_to']
-    return saldoTo'''
 
 
 def calculaSaldoMoneda(moneda):
@@ -112,13 +98,29 @@ def detalleMovimiento(id=None):
 
 
         if request.method == 'POST':
+            print("***** REQUEST JSON ******: {}".format(request.json))
+            fechaHoraActual = str(datetime.now())
+            fechaActual = fechaHoraActual[:10]
+            horaActual = fechaHoraActual[11:23]
             
+            print("***** FECHA ******: {}".format(fechaActual))
+            print("***** HORA ******: {}".format(horaActual))
+            request.json['date'] = fechaActual
+            request.json['time'] = horaActual
+            
+            print("***** REQUEST JSON 2 ******: {}".format(request.json))
+
+            if request.json['moneda_from'] != 'EUR':
+                if calculaSaldoMoneda(request.json['moneda_from']) < float(request.json['cantidad_from']):
+                    return jsonify({"status": "fail", "mensaje": "Saldo insuficiente"}), HTTPStatus.OK
+
+
             dbManager.modificaTablaSQL("""
                 INSERT INTO movimientos (date, time, moneda_from, cantidad_from, moneda_to, cantidad_to)
                 VALUES (:date, :time, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to)""", request.json)
-            print("***** REQUEST JSON ******: {}".format(request.json))
+            
 
-            return jsonify({"status": "success", "mensaje": "registro creado"}), HTTPStatus.CREATED
+            return jsonify({"status": "success", "mensaje": "Registro creado"}), HTTPStatus.CREATED
 
    
     except sqlite3.Error as e:
@@ -151,14 +153,7 @@ def statusAPI():
         print("saldoTo MONEDAS: {}".format(saldoToMonedas))
         print("saldo MONEDAS: {}".format(saldoMonedas))
         
-        '''for i in range(len(monedas)):
-            saldoFromMonedas[monedas[i]] = calculaSaldoFrom(queryFrom, [monedas[i]])
-            saldoToMonedas[monedas[i]] = calculaSaldoTo(queryTo, [monedas[i]])
-            saldoMonedas[monedas[i]] = saldoToMonedas[monedas[i]] - saldoFromMonedas[monedas[i]]
-        print("saldoFrom MONEDAS: {}".format(saldoFromMonedas))
-        print("saldoTo MONEDAS: {}".format(saldoToMonedas))
-        print("saldo MONEDAS: {}".format(saldoMonedas))'''
-        
+       
         # Calculamos el valor en € de nuestras Cryptos
         for i in range(1, len(monedas)):
             if saldoMonedas[monedas[i]] > 0:
