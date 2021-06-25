@@ -16,8 +16,11 @@ saldoToMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
 saldoMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
 valorCrypto = {'BTC': 0, 'ETH': 0 }
 
+queryFrom = "SELECT cantidad_from FROM movimientos WHERE moneda_from = ?;"
+queryTo = "SELECT cantidad_to FROM movimientos WHERE moneda_to = ?;"
 
-def calculaSaldoFrom(query, parametros=[]):
+
+'''def calculaSaldoFrom(query, parametros=[]):
     lista = dbManager.consultaMuchasSQL(query, parametros)
     saldoFrom = 0
     for i in range(len(lista)):
@@ -29,7 +32,47 @@ def calculaSaldoTo(query, parametros=[]):
     saldoTo = 0
     for i in range(len(lista)):
         saldoTo += lista[i]['cantidad_to']
-    return saldoTo
+    return saldoTo'''
+
+
+def calculaSaldoMoneda(moneda):
+    
+    listaFrom = dbManager.consultaMuchasSQL(queryFrom, [moneda])
+    saldoFrom = 0
+    for x in range(len(listaFrom)):
+        saldoFrom += listaFrom[x]['cantidad_from']
+    saldoFromMonedas[moneda] = saldoFrom
+
+    listaTo = dbManager.consultaMuchasSQL(queryTo, [moneda])
+    saldoTo = 0
+    for y in range(len(listaTo)):
+        saldoTo += listaTo[y]['cantidad_to']
+    saldoToMonedas[moneda] = saldoTo
+
+    saldoMonedas[moneda] = saldoToMonedas[moneda] - saldoFromMonedas[moneda]
+
+    return saldoMonedas[moneda]
+
+
+def calculaSaldo():
+    for i in range(len(monedas)):
+        listaFrom = dbManager.consultaMuchasSQL(queryFrom, [monedas[i]])
+        saldoFrom = 0
+        for x in range(len(listaFrom)):
+            saldoFrom += listaFrom[x]['cantidad_from']
+        saldoFromMonedas[monedas[i]] = saldoFrom
+
+        listaTo = dbManager.consultaMuchasSQL(queryTo, [monedas[i]])
+        saldoTo = 0
+        for y in range(len(listaTo)):
+            saldoTo += listaTo[y]['cantidad_to']
+        saldoToMonedas[monedas[i]] = saldoTo
+
+        saldoMonedas[monedas[i]] = saldoToMonedas[monedas[i]] - saldoFromMonedas[monedas[i]]
+
+    return saldoFromMonedas, saldoToMonedas, saldoMonedas
+
+
 
 
 
@@ -69,9 +112,11 @@ def detalleMovimiento(id=None):
 
 
         if request.method == 'POST':
+            
             dbManager.modificaTablaSQL("""
                 INSERT INTO movimientos (date, time, moneda_from, cantidad_from, moneda_to, cantidad_to)
                 VALUES (:date, :time, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to)""", request.json)
+            print("***** REQUEST JSON ******: {}".format(request.json))
 
             return jsonify({"status": "success", "mensaje": "registro creado"}), HTTPStatus.CREATED
 
@@ -96,37 +141,35 @@ def statusAPI():
     
     
     url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol={}&convert=EUR&CMC_PRO_API_KEY={}'
-        
-    queryFrom = "SELECT cantidad_from FROM movimientos WHERE moneda_from = ?;"
-    queryTo = "SELECT cantidad_to FROM movimientos WHERE moneda_to = ?;"
-
+    
 
     try:
         
-        # Calculamos saldo FROM/TO de cada moneda
-        for i in range(len(monedas)):
-            saldoFromMonedas[monedas[i]] = calculaSaldoFrom(queryFrom, [monedas[i]])
+        # Calculamos saldo FROM/TO y el saldo (saldoTo - saldoFrom) de cada moneda
+        calculaSaldo()
         print("saldoFrom MONEDAS: {}".format(saldoFromMonedas))
-        
-        for i in range(len(monedas)):
-            saldoToMonedas[monedas[i]] = calculaSaldoTo(queryTo, [monedas[i]])
         print("saldoTo MONEDAS: {}".format(saldoToMonedas))
-
-        # Calculamos saldo de cada moneda (saldoTo - saldoFrom)
-        for i in range(len(monedas)):
-            saldoMonedas[monedas[i]] = saldoToMonedas[monedas[i]] - saldoFromMonedas[monedas[i]]
         print("saldo MONEDAS: {}".format(saldoMonedas))
         
-        # Calculamos el valor en euros de nuestras Cryptos
+        '''for i in range(len(monedas)):
+            saldoFromMonedas[monedas[i]] = calculaSaldoFrom(queryFrom, [monedas[i]])
+            saldoToMonedas[monedas[i]] = calculaSaldoTo(queryTo, [monedas[i]])
+            saldoMonedas[monedas[i]] = saldoToMonedas[monedas[i]] - saldoFromMonedas[monedas[i]]
+        print("saldoFrom MONEDAS: {}".format(saldoFromMonedas))
+        print("saldoTo MONEDAS: {}".format(saldoToMonedas))
+        print("saldo MONEDAS: {}".format(saldoMonedas))'''
+        
+        # Calculamos el valor en € de nuestras Cryptos
         for i in range(1, len(monedas)):
-            respuestaCrypto = requests.get(url.format(saldoMonedas[monedas[i]], monedas[i], API_KEY_COINMARKET)).json()
-            print("respuesta CRYPTO {} *********: {}". format(monedas[i], respuestaCrypto))
+            if saldoMonedas[monedas[i]] > 0:
+                respuestaCrypto = requests.get(url.format(saldoMonedas[monedas[i]], monedas[i], API_KEY_COINMARKET)).json()
+                print("respuesta CRYPTO {} *********: {}". format(monedas[i], respuestaCrypto))
 
-            if respuestaCrypto['status']['error_code'] != 0:
-                return jsonify({'status': 'fail', 'mensaje': respuestaCrypto['status']['error_message']})
+                if respuestaCrypto['status']['error_code'] != 0:
+                    return jsonify({'status': 'fail', 'mensaje': respuestaCrypto['status']['error_message']})
 
-            valorCrypto[monedas[i]] = respuestaCrypto['data']['quote']['EUR']['price']
-            print("VALOR CRYPTO {} *********: {}". format(monedas[i], valorCrypto[monedas[i]]))
+                valorCrypto[monedas[i]] = respuestaCrypto['data']['quote']['EUR']['price']
+                print("VALOR CRYPTO {} *********: {}". format(monedas[i], valorCrypto[monedas[i]]))
 
         # Calculamos el valor TOTAL en € de todas las Cryptos
         valorCryptosTotal = sum(valorCrypto.values())
