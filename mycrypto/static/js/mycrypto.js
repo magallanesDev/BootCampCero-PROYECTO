@@ -1,4 +1,3 @@
-// const API_KEY_COINMARKET = '43095178-7dd8-48a4-8b66-e799480ad420'
 const movGlobal = {}
 
 xhr = new XMLHttpRequest()
@@ -14,7 +13,7 @@ function muestraMovimientos() {
             return
         }
 
-        const tbody = document.querySelector(".tabla-movimientos tbody")  // lo insertamos dentro de tbody (mirar spa.html)
+        const tbody = document.querySelector(".tabla-movimientos tbody")  // lo insertamos dentro de tbody (mirar mycrypto.html)
         tbody.innerHTML = ""
         
         for (let i = 0; i < respuesta.movimientos.length; i++) {
@@ -99,9 +98,9 @@ function recibeRespuestaStatus() {
         console.log(respuesta.data.invertido)
 
         document.querySelector("#valor_actual").setAttribute("placeholder", respuesta.data.valor_actual)
-        console.log(respuesta.data.value) 
+        console.log(respuesta.data.valor_actual) 
         
-        resultadoInv = respuesta.data.invertido - respuesta.data.valor_actual
+        resultadoInv = respuesta.data.valor_actual - respuesta.data.invertido
         document.querySelector("#resultado").setAttribute("placeholder", resultadoInv)
         console.log(resultadoInv)
 
@@ -127,6 +126,7 @@ function llamaApiCoinmarket(evento) {
 
     xhr.open("GET", `http://localhost:5000/api/v1/par/${movimiento.moneda_from}/${movimiento.moneda_to}/${movimiento.cantidad_from}`, true)
     // xhr.open('GET', `https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${movimiento.cantidad_from}&symbol=${movimiento.moneda_from}&convert=${movimiento.moneda_to}&CMC_PRO_API_KEY=${API_KEY_COINMARKET}`)
+    // si lo quisieramos hacer desde JS pero no es recomendable porque se vería nuestra API-KEY en el navegador.
     xhr.onload = recibeRespuestaCoinmarket
     xhr.send()
     console.log("He lanzado petición a Coin Market")

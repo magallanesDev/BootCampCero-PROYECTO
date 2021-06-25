@@ -10,15 +10,22 @@ from config import API_KEY_COINMARKET
 
 dbManager = DBmanager(app.config.get('DATABASE')) # instancia de la clase DBmanager
 
-def calculaSaldoFrom(query):
-    lista = dbManager.consultaMuchasSQL(query)
+monedas = ('EUR', 'BTC', 'ETH')
+saldoFromMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
+saldoToMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
+saldoMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
+valorCrypto = {'BTC': 0, 'ETH': 0 }
+
+
+def calculaSaldoFrom(query, parametros=[]):
+    lista = dbManager.consultaMuchasSQL(query, parametros)
     saldoFrom = 0
     for i in range(len(lista)):
         saldoFrom += lista[i]['cantidad_from']
     return saldoFrom
 
-def calculaSaldoTo(query):
-    lista = dbManager.consultaMuchasSQL(query)
+def calculaSaldoTo(query, parametros=[]):
+    lista = dbManager.consultaMuchasSQL(query, parametros)
     saldoTo = 0
     for i in range(len(lista)):
         saldoTo += lista[i]['cantidad_to']
@@ -87,87 +94,51 @@ def par(_from, _to, quantity = 1.0):
 @app.route('/api/v1/status')  # método GET por defecto, muestra el estado de nuestra inversión
 def statusAPI():
     
-    cryptos = ('BTC', 'ETH')
+    
     url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount={}&symbol={}&convert=EUR&CMC_PRO_API_KEY={}'
         
-    query1 = "SELECT cantidad_from FROM movimientos WHERE moneda_from='EUR';"
-    query2 = "SELECT cantidad_to FROM movimientos WHERE moneda_to='EUR';"
-    query3 = "SELECT cantidad_from FROM movimientos WHERE moneda_from='BTC';"
-    query4 = "SELECT cantidad_to FROM movimientos WHERE moneda_to='BTC';"
-    query5 = "SELECT cantidad_from FROM movimientos WHERE moneda_from='ETH';"
-    query6 = "SELECT cantidad_to FROM movimientos WHERE moneda_to='ETH';"
+    queryFrom = "SELECT cantidad_from FROM movimientos WHERE moneda_from = ?;"
+    queryTo = "SELECT cantidad_to FROM movimientos WHERE moneda_to = ?;"
 
 
     try:
-        # Calculamos saldoFromEur, que coincide con el total de euros invertidos
-        saldoFromEur = calculaSaldoFrom(query1)
-        print("saldoFrom EUR: {}".format(saldoFromEur))
+        
+        # Calculamos saldo FROM/TO de cada moneda
+        for i in range(len(monedas)):
+            saldoFromMonedas[monedas[i]] = calculaSaldoFrom(queryFrom, [monedas[i]])
+        print("saldoFrom MONEDAS: {}".format(saldoFromMonedas))
+        
+        for i in range(len(monedas)):
+            saldoToMonedas[monedas[i]] = calculaSaldoTo(queryTo, [monedas[i]])
+        print("saldoTo MONEDAS: {}".format(saldoToMonedas))
 
-        # Calculamos saldoToEur
-        saldoToEur = calculaSaldoTo(query2)
-        print("saldoTo EUR: {}".format(saldoToEur))
+        # Calculamos saldo de cada moneda (saldoTo - saldoFrom)
+        for i in range(len(monedas)):
+            saldoMonedas[monedas[i]] = saldoToMonedas[monedas[i]] - saldoFromMonedas[monedas[i]]
+        print("saldo MONEDAS: {}".format(saldoMonedas))
+        
+        # Calculamos el valor en euros de nuestras Cryptos
+        for i in range(1, len(monedas)):
+            respuestaCrypto = requests.get(url.format(saldoMonedas[monedas[i]], monedas[i], API_KEY_COINMARKET)).json()
+            print("respuesta CRYPTO {} *********: {}". format(monedas[i], respuestaCrypto))
 
-        # Calculamos el saldo de euros invertidos (saldoToEur - saldoFromEur)
-        saldoEurosInv = saldoToEur - saldoFromEur
-        print("saldo euros invertidos: {}".format(saldoEurosInv))
+            if respuestaCrypto['status']['error_code'] != 0:
+                return jsonify({'status': 'fail', 'mensaje': respuestaCrypto['status']['error_message']})
 
-        # Calculamos el valor de euros de nuestras Cryptos
-            # BTC
-        saldoFromBtc = calculaSaldoFrom(query3)
-        print("saldoFrom BTC: {}".format(saldoFromBtc))
+            valorCrypto[monedas[i]] = respuestaCrypto['data']['quote']['EUR']['price']
+            print("VALOR CRYPTO {} *********: {}". format(monedas[i], valorCrypto[monedas[i]]))
 
-        saldoToBtc = calculaSaldoTo(query4)
-        print("saldoTo BTC: {}".format(saldoToBtc))
-
-        saldoBtc = saldoToBtc - saldoFromBtc
-        print("saldo BTC: {}".format(saldoBtc))
-
-        respuestaBtc = requests.get(url.format(saldoBtc, cryptos[0], API_KEY_COINMARKET)).json()
-        #### GESTIÓN DE ERRORES ####
-        print("respuesta Btc *********: {}". format(respuestaBtc))
-
-        valorBtc = respuestaBtc['data']['quote']['EUR']['price']
-        print("VALOR BTC *********: {}". format(valorBtc))
-
-        if respuestaBtc['status']['error_code'] != 0:
-            return jsonify({'status': 'fail', 'mensaje': respuestaBtc['status']['error_message']})
-
-    
-            # ETH
-        print("**********************")
-        print("**********************")
-        saldoFromEth = calculaSaldoFrom(query5)
-        print("saldoFrom ETH: {}".format(saldoFromEth))
-
-        saldoToEth = calculaSaldoTo(query6)
-        print("saldoTo ETH: {}".format(saldoToEth))
-
-        saldoEth = saldoToEth - saldoFromEth
-        print("saldo ETH: {}".format(saldoEth))
-
-        respuestaEth = requests.get(url.format(saldoEth, cryptos[1], API_KEY_COINMARKET)).json()
-        #### GESTIÓN DE ERRORES ####
-        print("respuesta Eth *********: {}". format(respuestaEth))
-
-        valorEth = respuestaEth['data']['quote']['EUR']['price']
-        print("VALOR ETH *********: {}". format(valorEth))
-
-        if respuestaEth['status']['error_code'] != 0:
-            return jsonify({'status': 'fail', 'mensaje': respuestaEth['status']['error_message']})
-
-
-            # TOTAL
-        valorCryptos = valorBtc + valorEth
+        # Calculamos el valor TOTAL en € de todas las Cryptos
+        valorCryptosTotal = sum(valorCrypto.values())
+        print("VALOR TOTAL CRYPTOS: {}".format(valorCryptosTotal))
 
         # Calculamos el valor actual de la inversión (saldoFromEur + saldoEurosInv + valorCryptos)
-        valorActualInv = saldoToEur + valorCryptos
+        valorActualInv = saldoToMonedas['EUR'] + valorCryptosTotal
         
 
-        return jsonify({'status': 'success', 'data': {"invertido": saldoFromEur, "valor_actual": valorActualInv}})
+        return jsonify({'status': 'success', 'data': {"invertido": saldoFromMonedas['EUR'], "valor_actual": valorActualInv}})
     
 
     except sqlite3.Error as e:
         return jsonify({'status': 'fail', 'mensaje': str(e)})
-
-
 
