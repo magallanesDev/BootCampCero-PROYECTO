@@ -11,11 +11,11 @@ from config import API_KEY_COINMARKET
 
 dbManager = DBmanager(app.config.get('DATABASE')) # instancia de la clase DBmanager
 
-monedas = ('EUR', 'BTC', 'ETH')
-saldoFromMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
-saldoToMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
-saldoMonedas = {'EUR': 0, 'BTC': 0, 'ETH': 0 }
-valorCrypto = {'BTC': 0, 'ETH': 0 }
+monedas = ('EUR', 'BTC', 'ETH', 'XRP', 'LTC', 'BCH', 'BNB', 'USDT', 'EOS', 'BSV', 'XLM', 'ADA', 'TRX')
+saldoFromMonedas = {'EUR':0, 'BTC':0, 'ETH':0, 'XRP':0, 'LTC':0, 'BCH':0, 'BNB':0, 'USDT':0, 'EOS':0, 'BSV':0, 'XLM':0, 'ADA':0, 'TRX':0}
+saldoToMonedas = {'EUR':0, 'BTC':0, 'ETH':0, 'XRP':0, 'LTC':0, 'BCH':0, 'BNB':0, 'USDT':0, 'EOS':0, 'BSV':0, 'XLM':0, 'ADA':0, 'TRX':0}
+saldoMonedas = {'EUR':0, 'BTC':0, 'ETH':0, 'XRP':0, 'LTC':0, 'BCH':0, 'BNB':0, 'USDT':0, 'EOS':0, 'BSV':0, 'XLM':0, 'ADA':0, 'TRX':0}
+valorCrypto = {'BTC':0, 'ETH':0, 'XRP':0, 'LTC':0, 'BCH':0, 'BNB':0, 'USDT':0, 'EOS':0, 'BSV':0, 'XLM':0, 'ADA':0, 'TRX':0}
 
 queryFrom = "SELECT cantidad_from FROM movimientos WHERE moneda_from = ?;"
 queryTo = "SELECT cantidad_to FROM movimientos WHERE moneda_to = ?;"
