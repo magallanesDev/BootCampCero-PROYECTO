@@ -47,10 +47,6 @@ function recibeRespuestaCoinmarket() {
             return
         }
         
-        //movGlobal.date = respuesta.status.timestamp.substring(0, 10)
-        //console.log(movGlobal.date)
-        //movGlobal.time = respuesta.status.timestamp.substring(11, 23)
-        //console.log(movGlobal.time)
         movGlobal.moneda_from = document.querySelector("#moneda_from").value
         console.log(movGlobal.moneda_from)
         movGlobal.cantidad_from = document.querySelector("#cantidad_from").value
@@ -76,7 +72,7 @@ function recibeRespuestaCreamovimiento() {
             return
         }
         
-        alert(respuesta.mensaje)
+        alert(respuesta.mensaje + ' ' + respuesta.moneda_from + '/' + respuesta.moneda_to)
 
         llamaApiMovimientos()
         llamaApiStatus()

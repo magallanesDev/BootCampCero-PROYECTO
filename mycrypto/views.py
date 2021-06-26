@@ -90,7 +90,7 @@ def detalleMovimiento(id=None):
             if movimiento:
                 return jsonify({
                     "status": "success",
-                    "movimiento": movimiento
+                    "data": movimiento
             })
             else:
                 return jsonify({"status": "fail", "mensaje": "movimiento no encontrado"}), HTTPStatus.NOT_FOUND
@@ -110,6 +110,9 @@ def detalleMovimiento(id=None):
             
             print("***** REQUEST JSON 2 ******: {}".format(request.json))
 
+            if request.json['moneda_from'] == request.json['moneda_to']:
+                return jsonify({"status": "fail", "mensaje": "Las monedas from/to deben ser diferentes"}), HTTPStatus.OK
+
             if request.json['moneda_from'] != 'EUR':
                 if calculaSaldoMoneda(request.json['moneda_from']) < float(request.json['cantidad_from']):
                     return jsonify({"status": "fail", "mensaje": "Saldo insuficiente"}), HTTPStatus.OK
@@ -120,7 +123,7 @@ def detalleMovimiento(id=None):
                 VALUES (:date, :time, :moneda_from, :cantidad_from, :moneda_to, :cantidad_to)""", request.json)
             
 
-            return jsonify({"status": "success", "mensaje": "Registro creado"}), HTTPStatus.CREATED
+            return jsonify({"status": "success", "moneda_from": request.json['moneda_from'], "moneda_to": request.json['moneda_to'], "mensaje": "Registro creado"}), HTTPStatus.CREATED
 
    
     except sqlite3.Error as e:
