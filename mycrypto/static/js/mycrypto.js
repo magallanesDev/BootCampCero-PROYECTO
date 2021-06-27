@@ -68,7 +68,7 @@ function recibeRespuestaCreamovimiento() {
         const respuesta = JSON.parse(this.responseText)
 
         if (respuesta.status !== 'success') {
-            alert("Se ha producido un error en acceso a servidor: " + respuesta.mensaje)
+            alert(respuesta.mensaje)
             return
         }
         
@@ -161,5 +161,4 @@ window.onload = function() {
     
     document.querySelector("#ok")
         .addEventListener("click", llamaApiCreaMovimiento)
-
 }
