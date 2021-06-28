@@ -91,7 +91,7 @@ def detalleMovimiento(id=None):
                     "data": movimiento
             })
             else:
-                return jsonify({"status": "fail", "mensaje": "movimiento no encontrado"}), HTTPStatus.NOT_FOUND
+                return jsonify({"status": "fail", "mensaje": "Movimiento no encontrado"}), HTTPStatus.NOT_FOUND
 
 
 
@@ -164,11 +164,11 @@ def statusAPI():
         print("*** VALOR TOTAL CRYPTOS ***: {}".format(valorCryptosTotal))
         print("*** VALOR TOTAL CRYPTOS VALUES ***: {}".format(valorCrypto.values()))
 
-        # Calculamos el total de euros invertidos (saldoFromEur - saldoToEur)
-        totalEurosInvertidos = saldoFromMonedas['EUR'] - saldoToMonedas['EUR']
+        # Calculamos el valor actual de nuestra inversión (saldoToEur + valorCryptosTotal)
+        valorActualInv = saldoToMonedas['EUR'] + valorCryptosTotal
 
         
-        return jsonify({'status': 'success', 'data': {"invertido": totalEurosInvertidos, "valor_actual": valorCryptosTotal}})
+        return jsonify({'status': 'success', 'data': {"invertido": saldoFromMonedas['EUR'], "valor_actual": valorActualInv}})
 
 
     except sqlite3.Error as e:
