@@ -74,6 +74,7 @@ def movimientosAPI():
         lista = dbManager.consultaMuchasSQL(query)
         return jsonify({'status': 'success', 'movimientos': lista})
     except sqlite3.Error as e:
+        print("error", e)
         return jsonify({'status': 'fail', 'mensaje': str(e)})
 
 
@@ -172,4 +173,5 @@ def statusAPI():
 
 
     except sqlite3.Error as e:
-        return jsonify({'status': 'fail', 'mensaje': str(e)})
+        print("error", e)
+        return jsonify({'status': 'fail', 'mensaje': str(e)}), HTTPStatus.BAD_REQUEST
