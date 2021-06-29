@@ -72,7 +72,6 @@ def movimientosAPI():
     
     try:
         lista = dbManager.consultaMuchasSQL(query)
-        print("*** LISTA MOVIMIENTOS ***: {}".format(lista))
         return jsonify({'status': 'success', 'movimientos': lista})
     except sqlite3.Error as e:
         print("error", e)
@@ -144,9 +143,9 @@ def statusAPI():
     try:   
         # Calculamos saldo FROM/TO y el saldo (saldoTo - saldoFrom) de cada moneda
         calculaSaldo()
-        print("saldoFrom MONEDAS: {}".format(saldoFromMonedas))
-        print("saldoTo MONEDAS: {}".format(saldoToMonedas))
-        print("saldo MONEDAS: {}".format(saldoMonedas))
+        print("**** saldoFrom MONEDAS ****: {}".format(saldoFromMonedas))
+        print("**** saldoTo MONEDAS ****: {}".format(saldoToMonedas))
+        print("**** saldo MONEDAS ****: {}".format(saldoMonedas))
         
         # Calculamos el valor en € de nuestras Cryptos
         for i in range(1, len(monedas)):
@@ -158,12 +157,11 @@ def statusAPI():
                     return jsonify({'status': 'fail', 'mensaje': respuestaCrypto['status']['error_message']})
 
                 valorCrypto[monedas[i]] = respuestaCrypto['data']['quote']['EUR']['price']
-                print("******* VALOR CRYPTO {} *******: {} *******". format(monedas[i], valorCrypto[monedas[i]]))
+                print("**** VALOR CRYPTO {}: {} ****". format(monedas[i], valorCrypto[monedas[i]]))
 
         # Calculamos el valor TOTAL en € de todas las Cryptos
         valorCryptosTotal = sum(valorCrypto.values())
-        print("*** VALOR TOTAL CRYPTOS ***: {}".format(valorCryptosTotal))
-        print("*** VALOR TOTAL CRYPTOS VALUES ***: {}".format(valorCrypto.values()))
+        print("**** VALOR TOTAL CRYPTOS ****: {}".format(valorCryptosTotal))
 
         # Calculamos el valor actual de nuestra inversión (saldoToEur + valorCryptosTotal)
         valorActualInv = saldoToMonedas['EUR'] + valorCryptosTotal
@@ -181,10 +179,10 @@ def statusAPI():
                 listaToCryptosConSaldo.append(saldoToMonedas[monedas[i]])
                 listaSaldosCryptosConSaldo.append(saldoMonedas[monedas[i]])
 
-        print("******** LISTA CRYPTOS CON SALDO ******: {}".format(listaCryptosConSaldo))
-        print("******** LISTA CRYPTOS from CON SALDO ******: {}".format(listaFromCryptosConSaldo))
-        print("******** LISTA CRYPTOS to CON SALDO ******: {}".format(listaToCryptosConSaldo))
-        print("******** LISTA SALDO CRYPTOS CON SALDO ******: {}".format(listaSaldosCryptosConSaldo))
+        print("**** LISTA CRYPTOS CON SALDO ****: {}".format(listaCryptosConSaldo))
+        print("**** LISTA CRYPTOS from CON SALDO ****: {}".format(listaFromCryptosConSaldo))
+        print("**** LISTA CRYPTOS to CON SALDO ****: {}".format(listaToCryptosConSaldo))
+        print("**** LISTA SALDOS CRYPTOS CON SALDO ****: {}".format(listaSaldosCryptosConSaldo))
 
 
         return jsonify({'status': 'success', 'data': {"invertido": saldoFromMonedas['EUR'], "valor_actual": valorActualInv, "lista_monedas": listaCryptosConSaldo,
