@@ -20,7 +20,7 @@
 
 #### Rellenar el archivo <.env_template> con punto de entrada <run.py> y modo de ejecución <development> o <production>. Renombrar el archivo <.env_template> a <.env>
 
-#### Rellenar el archivo <config_template.py> con ruta a base de datos. Renombrar el archivo <config_template.py> a <config.py>
+#### Rellenar el archivo <config_template.py> con la ruta a base de datos y la API-KEY de CoinMarketCap. Renombrar el archivo <config_template.py> a <config.py>
 
 #### Crear la base de datos SQL <movimientos.db> en el directorio <data>. Ver archivo </migrations/initial.sql>
     CREATE TABLE "movimientos" (
