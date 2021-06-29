@@ -1,3 +1,7 @@
 .tabla-movimientos tbody tr:hover {
     background-color: aquamarine;
 }
+
+.tabla-saldos tbody tr:hover {
+    background-color: aquamarine;
+}

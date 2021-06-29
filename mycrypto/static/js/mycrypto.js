@@ -100,6 +100,27 @@ function recibeRespuestaStatus() {
         document.querySelector("#resultado").setAttribute("placeholder", resultadoInv)
         console.log(resultadoInv)
 
+        ////////////////////////////////////////
+
+        const tbody = document.querySelector(".tabla-saldos tbody")  // lo insertamos dentro de tbody (mirar mycrypto.html)
+        tbody.innerHTML = ""
+        
+        for (let i = 0; i < respuesta.data.lista_monedas.length; i++) {
+            
+            const fila = document.createElement("tr")
+        
+            const dentro = `
+                <td>${respuesta.data.lista_monedas[i]}</td>
+                <td>${respuesta.data.lista_saldo_from[i]}</td>
+                <td>${respuesta.data.lista_saldo_to[i]}</td>
+                <td>${respuesta.data.lista_saldo[i]}</td>
+            `
+            fila.innerHTML = dentro
+            
+            tbody.appendChild(fila)
+        }
+
+
     }
 }
 

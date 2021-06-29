@@ -89,18 +89,35 @@
         <hr>
         <div class="row">
             <div class="column column-33">
-                <label for="invertido">Total invertido (€)</label>
+                <label for="invertido">TOTAL INVERTIDO (€)</label>
                 <input type="number" name="invertido" id="invertido" readonly placeholder="total invertido (€)">
             </div>
             <div class="column column-33">
-                <label for="valor_actual">Valor actual (€)</label>
+                <label for="valor_actual">VALOR ACTUAL (€)</label>
                 <input type="number" name="valor_actual" id="valor_actual" readonly placeholder="valor actual (€)">
             </div>
             <div class="column column-33">
-                <label for="resultado">Resultado inversión (€)</label>
+                <label for="resultado">RESULTADO INVERSIÓN (€)</label>
                 <input type="number" name="resultado" id="resultado" readonly placeholder="resultado inversión (€)">
             </div>
         </div>
+        <hr>
+        <section class="container" id="lista-movimientos">
+            <div class="lista-movimientos">
+                <table class="tabla-saldos">
+                    <thead>
+                        <tr>
+                            <th>CRYPTO</th>
+                            <th>Saldo_From</th>
+                            <th>Saldo_to</th>
+                            <th>SALDO</th>
+                        </tr>  
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
         <hr>
     </div>
 <footer>&copy magallanesDev 2021 - Todos los derechos reservados</footer> 
