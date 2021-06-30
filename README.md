@@ -22,6 +22,9 @@
 
 #### Rellenar el archivo <config_template.py> con la ruta a base de datos y la API-KEY de CoinMarketCap. Renombrar el archivo <config_template.py> a <config.py>
 
+#### En el archivo </mycrypto/static/js/mycrypto.js> cambiar la variable <host> al valor <"localhost:5000">
+    let host = "localhost:5000"
+
 #### Crear la base de datos SQL <movimientos.db> en el directorio <data>. Ver archivo </migrations/initial.sql>
     CREATE TABLE "movimientos" (
     "id"	INTEGER,

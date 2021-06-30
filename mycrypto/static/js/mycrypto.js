@@ -1,5 +1,7 @@
 const movGlobal = {}
 
+let host = "15.160.31.134"   // en modo desarrollo (local) poner "localhost:5000"
+
 xhr = new XMLHttpRequest()
 xhr2 = new XMLHttpRequest()
 
@@ -127,7 +129,7 @@ function recibeRespuestaStatus() {
 
 
 function llamaApiMovimientos() {
-    xhr.open('GET', `http://localhost:5000/api/v1/movimientos`, true)
+    xhr.open('GET', `http://${host}/api/v1/movimientos`, true)
     xhr.onload = muestraMovimientos
     xhr.send()
 }
@@ -141,7 +143,7 @@ function llamaApiCoinmarket(evento) {
     movimiento.cantidad_from = document.querySelector("#cantidad_from").value
     movimiento.moneda_to = document.querySelector("#moneda_to").value
 
-    xhr.open("GET", `http://localhost:5000/api/v1/par/${movimiento.moneda_from}/${movimiento.moneda_to}/${movimiento.cantidad_from}`, true)
+    xhr.open("GET", `http://${host}/api/v1/par/${movimiento.moneda_from}/${movimiento.moneda_to}/${movimiento.cantidad_from}`, true)
     // xhr.open('GET', `https://pro-api.coinmarketcap.com/v1/tools/price-conversion?amount=${movimiento.cantidad_from}&symbol=${movimiento.moneda_from}&convert=${movimiento.moneda_to}&CMC_PRO_API_KEY=${API_KEY_COINMARKET}`)
     // si lo quisieramos hacer desde JS pero no es recomendable porque se vería nuestra API-KEY en el navegador.
     xhr.onload = recibeRespuestaCoinmarket
@@ -154,7 +156,7 @@ function llamaApiCoinmarket(evento) {
 function llamaApiCreaMovimiento(evento) {
     evento.preventDefault()
 
-    xhr.open("POST", `http://localhost:5000/api/v1/movimiento`, true)
+    xhr.open("POST", `http://${host}/api/v1/movimiento`, true)
     xhr.onload = recibeRespuestaCreamovimiento
 
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
@@ -165,7 +167,7 @@ function llamaApiCreaMovimiento(evento) {
 
 
 function llamaApiStatus() {
-    xhr2.open("GET", `http://localhost:5000/api/v1/status`, true)
+    xhr2.open("GET", `http://${host}/api/v1/status`, true)
     xhr2.onload = recibeRespuestaStatus
     xhr2.send()  
 }   
