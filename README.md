@@ -1,6 +1,6 @@
-# PROYECTO FINAL del BootCamp Cero VII Ed.
+# PROYECTO FINAL del BootCamp Cero VII Ed. KeepCoding
 
-## Aplicación web myCRYPTO - FLASK + VANILLA JS
+## Aplicación web myCRYPTO - FLASK + VANILLA JS --- magallanesDev 2021
 
 ### Inicio: 14 junio 2021 -- Final: 5 julio 2021
 
@@ -11,9 +11,7 @@
 
     . <nombre_entorno_virtual>/bin/activate
 
-#### Instalar FLASK. Instalar <requirements.txt> y librería <dotenv>:
-    pip install Flask
-
+#### Instalar <requirements.txt> y librería <dotenv>:
     pip install -r requeriments.txt
     
 	pip install python-dotenv
@@ -21,9 +19,6 @@
 #### Rellenar el archivo <.env_template> con punto de entrada <run.py> y modo de ejecución <development> o <production>. Renombrar el archivo <.env_template> a <.env>
 
 #### Rellenar el archivo <config_template.py> con la ruta a base de datos y la API-KEY de CoinMarketCap. Renombrar el archivo <config_template.py> a <config.py>
-
-#### En el archivo </mycrypto/static/js/mycrypto.js> cambiar la variable <host> al valor <"localhost:5000">
-    let host = "localhost:5000"
 
 #### Crear la base de datos SQL <movimientos.db> en el directorio <data>. Ver archivo </migrations/initial.sql>
     CREATE TABLE "movimientos" (

@@ -1,6 +1,6 @@
 const movGlobal = {}
 
-let host = "15.160.31.134"   // en modo desarrollo (local) poner "localhost:5000"
+let host = "localhost:5000"  // poner aquí la ip elástica de AWS si se quiere usar desde la nube
 
 xhr = new XMLHttpRequest()
 xhr2 = new XMLHttpRequest()
